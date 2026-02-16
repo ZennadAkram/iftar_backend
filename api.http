@@ -1,0 +1,1 @@
+GET http://127.0.0.1:8000/api/iftar/nearest/?lat=36.7525&lng=3.0420
