@@ -15,6 +15,7 @@ cd iftar_backend
 1.2 Create a Virtual Environment and Activate It
 python3 -m venv venv
 source venv/bin/activate
+```
 
 1.3 Install Dependencies
 
