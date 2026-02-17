@@ -1,1 +1,3 @@
-GET http://127.0.0.1:8000/api/iftar/nearest/?lat=36.7525&lng=3.0420
+GET http://127.0.0.1:8000/api/iftar/nearest/?lat=36.75&lng=3.05&search=
+###
+GET https://islamicapi.com/api/v1/fasting/?lat=36.7538&lon=3.0588&api_key=ixiYSvw4t8c38PFgm9dKh2eUXL7HahziFXH8heF317nUNCWf

@@ -3,9 +3,14 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from .models import IftarLocation
 from .serializers import IftarLocationSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
 
 class NearestIftarLocationsView(ListAPIView):
     serializer_class = IftarLocationSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name', 'city', 'address'] 
 
     def get_queryset(self):
         queryset = IftarLocation.objects.filter(is_active=True)
