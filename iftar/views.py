@@ -8,21 +8,32 @@ class NearestIftarLocationsView(ListAPIView):
     serializer_class = IftarLocationSerializer
 
     def get_queryset(self):
-        # Get user's latitude and longitude from query params
+        queryset = IftarLocation.objects.filter(is_active=True)
         lat = self.request.query_params.get('lat')
         lng = self.request.query_params.get('lng')
 
-        queryset = IftarLocation.objects.filter(is_active=True)
+        if lat is not None and lng is not None:
+            try:
+                lat = float(lat)
+                lng = float(lng)
+                user_location = Point(lng, lat, srid=4326)
 
-        try:
-            lat = float(lat)
-            lng = float(lng)
-            user_location = Point(lng, lat, srid=4326)
+                # Annotate queryset with distance in meters
+                queryset = queryset.annotate(
+                    distance_m=Distance('location', user_location)
+                ).order_by('distance_m')
 
-            # Annotate distance and order by nearest
-            queryset = queryset.annotate(distance=Distance('location', user_location)).order_by('distance')
-        except (TypeError, ValueError):
-            # If user location not provided or invalid, return all active
-            pass
+                # Save user_location for serializer
+                self.user_location = user_location
+            except ValueError:
+                self.user_location = None
+        else:
+            self.user_location = None
 
         return queryset
+
+    def get_serializer_context(self):
+        # Pass user_location to serializer
+        context = super().get_serializer_context()
+        context['reference_point'] = getattr(self, 'user_location', None)
+        return context
