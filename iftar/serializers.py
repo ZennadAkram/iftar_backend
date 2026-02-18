@@ -18,7 +18,7 @@ class IftarLocationSerializer(serializers.ModelSerializer):
             'is_active',
             'latitude',
             'longitude',
-            'distance',  # include distance
+            'distance',  
         ]
 
     def get_latitude(self, obj):
